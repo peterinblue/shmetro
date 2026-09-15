@@ -24,7 +24,9 @@
   .hero{padding:14px 4px 8px}
   .eyebrow{display:inline-block;letter-spacing:.18em;color:var(--red);font-weight:800;font-size:.74rem;
     border:1px solid var(--red);border-radius:999px;padding:4px 12px}
-  h1{font-size:clamp(1.9rem,6vw,3.2rem);line-height:1.08;margin:.7rem 0 .4rem;font-weight:900}
+  .title-row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:.7rem 0 .4rem}
+  h1{font-size:clamp(1.9rem,6vw,3.2rem);line-height:1.08;margin:0;font-weight:900}
+  .byline{color:var(--muted);font-size:.95rem;font-weight:700;white-space:nowrap;letter-spacing:.02em}
   h1 em{color:var(--red);font-style:normal}
   .sub{color:var(--muted);max-width:640px;font-size:1.02rem}
   /* calculator */
@@ -102,7 +104,10 @@
 <div class="wrap">
   <header class="hero">
     <span class="eyebrow">2026 上海地铁调价 · 听证方案测算</span>
-    <h1>上海地铁<em>票价测算器</em></h1>
+    <div class="title-row">
+      <h1>上海地铁<em>票价测算器</em></h1>
+      <span class="byline">by 梁英俊</span>
+    </div>
     <p class="sub">地铁要调价了，你<strong>家到公司</strong>那段到底涨没涨、涨多少？选线路、选站点，1 秒出结果：<strong>现行价、方案一、方案二</strong>各要花多少钱，一目了然。</p>
   </header>
 
