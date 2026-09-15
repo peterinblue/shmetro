@@ -41,28 +41,58 @@
     fareTableBody: $("fareTableBody"),
   };
 
-  /* ---------- Fare schemes ---------- */
-  // 现行：0–6km 3元，6km 之后每 10km +1元
+  /* ---------- Fare schemes (2026-08 听证方案) ---------- */
+  const PROPOSALS = {
+    current: {
+      initialPrice: 3,
+      initialKm: 6,
+      steps: [10, 10],
+      tailStartKm: 26,
+      tailKm: 10,
+    },
+    one: {
+      initialPrice: 3,
+      initialKm: 4,
+      steps: [4, 4, 4, 7, 7, 7, 10, 10, 10],
+      tailStartKm: 67,
+      tailKm: 15,
+    },
+    two: {
+      initialPrice: 4,
+      initialKm: 6,
+      steps: [6, 8, 8, 10, 10, 12, 12],
+      tailStartKm: 72,
+      tailKm: 14,
+    },
+  };
+
+  function fareByProposal(distanceKm, proposal) {
+    if (!Number.isFinite(distanceKm) || distanceKm <= 0) return 0;
+    let price = proposal.initialPrice;
+    let boundary = proposal.initialKm;
+    if (distanceKm <= boundary) return price;
+    for (const step of proposal.steps) {
+      boundary += step;
+      price += 1;
+      if (distanceKm <= boundary) return price;
+    }
+    price += Math.ceil((distanceKm - proposal.tailStartKm) / proposal.tailKm);
+    return price;
+  }
+
+  // 现行：0–6km 3元，之后每 10km +1元
   function fareCurrent(km) {
-    if (!(km > 0)) return 0;
-    if (km <= 6) return 3;
-    return 3 + Math.ceil((km - 6) / 10);
+    return fareByProposal(km, PROPOSALS.current);
   }
 
-  // 方案一：0–6km 3元；6–16km 每 5km +1元；16km 之后每 10km +1元
+  // 方案一：起乘 3 元 / 4km；加价间距 4,4,4,7,7,7,10,10,10；67km+ 每 15km +1
   function fareScheme1(km) {
-    if (!(km > 0)) return 0;
-    if (km <= 6) return 3;
-    if (km <= 16) return 3 + Math.ceil((km - 6) / 5);
-    // 6–16 已走满 2 级
-    return 3 + 2 + Math.ceil((km - 16) / 10);
+    return fareByProposal(km, PROPOSALS.one);
   }
 
-  // 方案二：0–6km 4元；6km 之后每 10km +1元
+  // 方案二：起乘 4 元 / 6km；加价间距 6,8,8,10,10,12,12；72km+ 每 14km +1
   function fareScheme2(km) {
-    if (!(km > 0)) return 0;
-    if (km <= 6) return 4;
-    return 4 + Math.ceil((km - 6) / 10);
+    return fareByProposal(km, PROPOSALS.two);
   }
 
   function deltaText(base, val) {
